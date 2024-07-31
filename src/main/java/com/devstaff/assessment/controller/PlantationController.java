@@ -18,7 +18,7 @@ public class PlantationController {
     @Autowired
     private PlantationService plantationService;
 
-    @PostMapping
+    @PostMapping("/save")
     public ResponseEntity<Plantation> savePlantation(@RequestBody Plantation plantation) {
         log.debug("Request to save plantation : {}", plantation);
         try {

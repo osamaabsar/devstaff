@@ -1,41 +1,89 @@
 # Getting Started
 
-### Reference Documentation
-For further reference, please consider the following sections:
+### Task
+Organization “FarmCollector”  wants to collect information from Farmers for every field for every season, per farm (2 API):
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.3.2/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.3.2/maven-plugin/reference/html/#build-image)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/3.3.2/reference/htmlsingle/index.html#web)
-* [Spring Data JPA](https://docs.spring.io/spring-boot/docs/3.3.2/reference/htmlsingle/index.html#data.sql.jpa-and-spring-data)
+1. Planted:   	
+   a. Planting Area (in acres).
+   b. Type of crops planted.
+   c. Amount of Expected product (in tons)
 
-### Guides
-The following guides illustrate how to use some features concretely:
 
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
-* [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
+2. Harvested:
+   a. Actual amount of harvested product.
+   Organization “FarmCollector”  want to see reports for every season shows expected vs actual amount of product:
+    1. For each farm
+    2. For each Type of crops
 
-### Maven Parent overrides
 
-Due to Maven's design, elements are inherited from the parent POM to the project POM.
-While most of the inheritance is fine, it also inherits unwanted elements like `<license>` and `<developers>` from the parent.
-To prevent this, the project POM contains empty overrides for these elements.
-If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
+### Setup
+To run the application, first setup database and run scripts from the given folder.
+
+#### Database Name 
+```devstaff```
+
+#### Database Scripts
+Run scripts from the following folder path in the database before running the application.
+
+``` src/main/resources/db-scripts```
+
+#### Default running structure
+Application runs on `http://localhost:8080` by default.
+Port can be changed from the ```server.port=8080``` property in ``` src/main/resources/application.properties``` 
+
+### Example API
+
+```POST api/harvest/save```
+###### Request Body
+```json
+{
+  "field": {
+    "id": 1
+  },
+  "season": "SPRING",
+  "cropType": {
+    "id": 1
+  },
+  "actualProductAmount": 150.0
+}
+```
+
+```GET /api/plantation/{id}```
+##### Response 
 
 ```json
 {
-  "name": "John Doe",
-  "posts": [
-    {
-      "title": "First Post",
-      "content": "This is the content of the first post."
+    "field": {
+        "id": 1,
+        "name": "Field Devstaff West",
+        "farm": {
+            "id": 1,
+            "name": "Farm Devstaff"
+        }
     },
-    {
-      "title": "Second Post",
-      "content": "This is the content of the second post."
-    }
-  ]
+    "season": "WINTER",
+    "plantingArea": 550.0,
+    "cropType": {
+        "id": 1,
+        "name": "Potato"
+    },
+    "expectedProductAmount": 500.0
 }
 ```
+### For Report
+
+#### By Season
+```GET api/report/season/{season}```
+
+#### Response in string
+
+Season : WINTER --- Expected Amount From Plantation : 500.0 --- Actual Amount Harvested : 500.0
+
+
+### By Field
+```GET api/report/field/{id}```
+
+#### Response in string
+
+In Field : Field Devstaff West --- Expected Amount From Plantation : 700.0 --- Actual Amount Harvested : 700.0 in tons
+

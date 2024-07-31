@@ -18,7 +18,7 @@ public class HarvestController {
     @Autowired
     private HarvestService harvestService;
 
-    @PostMapping
+    @PostMapping("/save")
     public ResponseEntity<Harvest> saveHarvest(@RequestBody Harvest harvest) {
         log.debug("Request to save harvest : {}", harvest);
         try {
